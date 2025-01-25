@@ -7,7 +7,6 @@ import android.view.KeyEvent.KEYCODE_DPAD_DOWN
 import android.view.KeyEvent.KEYCODE_DPAD_LEFT
 import android.view.KeyEvent.KEYCODE_DPAD_RIGHT
 import android.view.KeyEvent.KEYCODE_DPAD_UP
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View.INVISIBLE
@@ -15,11 +14,16 @@ import android.view.View.VISIBLE
 import android.widget.FrameLayout
 import androidx.core.view.marginLeft
 import androidx.core.view.marginTop
-import com.example.pr12_battletanks_ustinova_d_v_.Direction.UP
-import com.example.pr12_battletanks_ustinova_d_v_.Direction.DOWN
-import com.example.pr12_battletanks_ustinova_d_v_.Direction.LEFT
-import com.example.pr12_battletanks_ustinova_d_v_.Direction.RIGHT
+import com.example.pr12_battletanks_ustinova_d_v_.enums.Direction.UP
+import com.example.pr12_battletanks_ustinova_d_v_.enums.Direction.DOWN
+import com.example.pr12_battletanks_ustinova_d_v_.enums.Direction.LEFT
+import com.example.pr12_battletanks_ustinova_d_v_.enums.Direction.RIGHT
 import com.example.pr12_battletanks_ustinova_d_v_.databinding.ActivityMainBinding
+import com.example.pr12_battletanks_ustinova_d_v_.drawers.ElementsDrawer
+import com.example.pr12_battletanks_ustinova_d_v_.drawers.GridDrawer
+import com.example.pr12_battletanks_ustinova_d_v_.enums.Direction
+import com.example.pr12_battletanks_ustinova_d_v_.enums.Material
+import com.example.pr12_battletanks_ustinova_d_v_.models.Coordinate
 
 const val CELL_SIZE = 50
 
@@ -29,8 +33,13 @@ class MainActivity : AppCompatActivity() {
 
     private var editMode = false
     private val gridDrawer by lazy {
-        GridDrawer(this)
+        GridDrawer(binding.container)
     }
+
+    private val elementsDrawer by lazy {
+        ElementsDrawer(binding.container)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +47,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         supportActionBar?.title = "Menu"
+
+        binding.editorClear.setOnClickListener {elementsDrawer.currentMaterial = Material.EMPTY}
+        binding.editorBrick.setOnClickListener {elementsDrawer.currentMaterial = Material.BRICK}
+        binding.editorConcrete.setOnClickListener {
+            elementsDrawer.currentMaterial = Material.CONCRETE
+        }
+        binding.editorGrass.setOnClickListener {elementsDrawer.currentMaterial = Material.GRASS}
+        binding.container.setOnTouchListener { _, event ->
+            elementsDrawer.onTouchContainer(event.x, event.y)
+            return@setOnTouchListener true
+        }
+
     }
 
 
