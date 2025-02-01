@@ -19,8 +19,10 @@ import com.example.pr12_battletanks_ustinova_d_v_.enums.Direction.DOWN
 import com.example.pr12_battletanks_ustinova_d_v_.enums.Direction.LEFT
 import com.example.pr12_battletanks_ustinova_d_v_.enums.Direction.RIGHT
 import com.example.pr12_battletanks_ustinova_d_v_.databinding.ActivityMainBinding
+import com.example.pr12_battletanks_ustinova_d_v_.drawers.BulletDrawer
 import com.example.pr12_battletanks_ustinova_d_v_.drawers.ElementsDrawer
 import com.example.pr12_battletanks_ustinova_d_v_.drawers.GridDrawer
+import com.example.pr12_battletanks_ustinova_d_v_.drawers.TankDrawer
 import com.example.pr12_battletanks_ustinova_d_v_.enums.Direction
 import com.example.pr12_battletanks_ustinova_d_v_.enums.Material
 import com.example.pr12_battletanks_ustinova_d_v_.models.Coordinate
@@ -38,6 +40,14 @@ class MainActivity : AppCompatActivity() {
 
     private val elementsDrawer by lazy {
         ElementsDrawer(binding.container)
+    }
+
+    private val tankDrawer by lazy {
+        TankDrawer(binding.container)
+    }
+
+    private val bulletDrawer by lazy {
+        BulletDrawer(binding.container)
     }
 
 
@@ -94,10 +104,14 @@ class MainActivity : AppCompatActivity() {
     override fun onKeyDown(keyCode: Int, event: KeyEvent?):Boolean {
         when(keyCode)
         {
-            KEYCODE_DPAD_UP -> elementsDrawer.move(binding.myTank, UP)
-            KEYCODE_DPAD_DOWN -> elementsDrawer.move(binding.myTank, DOWN)
-            KEYCODE_DPAD_LEFT -> elementsDrawer.move(binding.myTank, LEFT)
-            KEYCODE_DPAD_RIGHT -> elementsDrawer.move(binding.myTank, RIGHT)
+            KEYCODE_DPAD_UP -> tankDrawer.move(binding.myTank, UP, elementsDrawer.elementsOnContainer)
+
+            KEYCODE_DPAD_DOWN -> tankDrawer.move(binding.myTank, DOWN, elementsDrawer.elementsOnContainer)
+
+            KEYCODE_DPAD_LEFT -> tankDrawer.move(binding.myTank, LEFT, elementsDrawer.elementsOnContainer)
+
+            KEYCODE_DPAD_RIGHT -> tankDrawer.move(binding.myTank, RIGHT, elementsDrawer.elementsOnContainer)
+
         }
         return super.onKeyDown(keyCode, event)
     }
